@@ -220,9 +220,14 @@ class IntrospectionSchemaMaterializerSpec extends WordSpec with Matchers with Fu
         query = ObjectType("Simple", "This is a simple type", fields[Any, Any](
           Field("string", OptionType(StringType), Some("This is a string field"),
             resolve = _ => None))),
-        directives = BuiltinDirectives ++ List(Directive("customDirective", Some("This is a custom directive"),
-          shouldInclude = _ => true,
-          locations = Set(DirectiveLocation.Field)))))
+        directives = BuiltinDirectives ++ List(
+          Directive("customDirective", Some("This is a custom directive"),
+            shouldInclude = _ => true,
+            locations = Set(DirectiveLocation.Field)),
+          Directive("customRepeatableDirective", Some("This is a custom repeatable directive"),
+            shouldInclude = _ => true,
+            repeatable = true,
+            locations = Set(DirectiveLocation.Field)))))
 
     "builds a schema aware of deprecation" in testSchema(
       Schema(ObjectType("Simple", "This is a simple type", fields[Any, Any](

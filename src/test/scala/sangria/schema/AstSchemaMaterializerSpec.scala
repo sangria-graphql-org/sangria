@@ -438,6 +438,21 @@ class AstSchemaMaterializerSpec extends WordSpec with Matchers with FutureResult
 
         cycleOutput(schema) should equal (schema) (after being strippedOfCarriageReturns)
       }
+      
+      "Supports repeatable directives" in {
+        val schemaStr =
+          """type Query {
+            |  str: String
+            |}
+            |
+            |directive @foo(arg: Int) repeatable on FIELD""".stripMargin
+
+        cycleOutput(schemaStr) should equal (schemaStr) (after being strippedOfCarriageReturns)
+
+        val schema = Schema.buildFromAst(QueryParser.parse(schemaStr))
+
+        schema.directivesByName("foo").repeatable should be (true)
+      }
     }
 
     "Failures" should {
