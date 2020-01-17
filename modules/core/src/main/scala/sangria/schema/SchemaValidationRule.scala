@@ -374,18 +374,12 @@ object ContainerMembersValidator extends SchemaElementValidator {
     validateObjectLikeType(schema, tpe, "Interface")
 
   def validateObjectLikeType(schema: Schema[_, _], tpe: ObjectLikeType[_, _], kind: String): Vector[Violation] = {
-    val emptyErrors =
-      if (tpe.uniqueFields.isEmpty)
-        Vector(EmptyFieldsViolation(kind, tpe.name, sourceMapper(schema), location(tpe)))
-      else Vector.empty
-
     val nonUnique =
       tpe.ownFields.groupBy(_.name).toVector.collect {
         case (fieldName, dup) if dup.size > 1 =>
           NonUniqueFieldsViolation(kind, tpe.name, fieldName, sourceMapper(schema), dup.flatMap(location).toList)
       }
-
-    emptyErrors ++ nonUnique
+    nonUnique
   }
 
   override def validateField(schema: Schema[_, _], tpe: ObjectLikeType[_, _], field: Field[_, _]) =

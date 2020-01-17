@@ -141,7 +141,7 @@ class SchemaConstraintsSpec extends WordSpec with Matchers {
         "Input type 'Input' must define one or more fields.",
         "Interface type 'Interface1' must define one or more fields.",
         "Interface type 'Interface2' must define one or more fields.",
-        "Object type 'Output' must define one or more fields."))
+      ))
     }
 
     "Not allow ObjectTypes with same name to be based on different case classes" in {
